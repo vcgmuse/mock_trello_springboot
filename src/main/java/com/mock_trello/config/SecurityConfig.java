@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                // Move formLogin and httpBasic to be configured *after* authorizeHttpRequests
+//                // Move formLogin and httpBasic to be configured *after* authorizeHttpRequests
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults())
                 .cors(withDefaults()); // Enable CORS
@@ -37,12 +37,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("http://localhost:5173"); // Replace with your React app's origin
+        configuration.addAllowedOrigin("*"); // Allow requests from ANY origin (for development)
         configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
-
+        configuration.addAllowedMethod("*"); // Allow all HTTP methods
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all endpoints
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

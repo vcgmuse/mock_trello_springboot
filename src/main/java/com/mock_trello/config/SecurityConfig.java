@@ -20,15 +20,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(withDefaults())
-            .httpBasic(withDefaults())
-            .cors(withDefaults()); // Enable CORS
-        
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                // Move formLogin and httpBasic to be configured *after* authorizeHttpRequests
+                .formLogin(withDefaults())
+                .httpBasic(withDefaults())
+                .cors(withDefaults()); // Enable CORS
+
         return http.build();
     }
 
@@ -39,7 +40,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:5173"); // Replace with your React app's origin
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all endpoints
         return source;
